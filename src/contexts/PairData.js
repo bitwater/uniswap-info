@@ -260,7 +260,7 @@ async function getBulkPairData(pairList, ethPrice) {
           return data
         })
     )
-    console.log('getBulkPairData:', pairData)
+    // console.log('getBulkPairData:', pairData)
     return pairData
   } catch (e) {
     console.log(e)
@@ -488,7 +488,7 @@ export function Updater() {
         fetchPolicy: 'cache-first',
       })
 
-      console.log('Updater:', pairs)
+      // console.log('Updater:', pairs)
       // format as array of addresses
       const formattedPairs = pairs.map((pair) => {
         return pair.id

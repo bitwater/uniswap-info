@@ -213,7 +213,7 @@ function App() {
                 </LayoutWrapper>
               </Route>
 
-              <Redirect to="/home" />
+              <Redirect to="/newpairs" />
             </Switch>
           </BrowserRouter>
         ) : (
