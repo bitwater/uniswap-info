@@ -134,7 +134,7 @@ function SideNav({ history }) {
                     Tokens
                   </Option>
                 </BasicLink>
-                <BasicLink to="/pairs">
+                {/* <BasicLink to="/pairs">
                   <Option
                     activeText={
                       (history.location.pathname.split('/')[1] === 'pairs' ||
@@ -144,6 +144,18 @@ function SideNav({ history }) {
                   >
                     <PieChart size={20} style={{ marginRight: '.75rem' }} />
                     Pairs
+                  </Option>
+                </BasicLink> */}
+                <BasicLink to="/newpairs">
+                  <Option
+                    activeText={
+                      (history.location.pathname.split('/')[1] === 'newpairs' ||
+                        history.location.pathname.split('/')[1] === 'newpair') ??
+                      undefined
+                    }
+                  >
+                    <PieChart size={20} style={{ marginRight: '.75rem' }} />
+                    NewPairs
                   </Option>
                 </BasicLink>
 

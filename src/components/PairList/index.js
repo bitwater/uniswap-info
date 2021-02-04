@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { CustomLink } from '../Link'
 import { Divider } from '../../components'
 import { withRouter } from 'react-router-dom'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formattedNum, formattedPercent, formatTime } from '../../utils'
 import DoubleTokenLogo from '../DoubleLogo'
 import FormattedName from '../FormattedName'
 import QuestionHelper from '../QuestionHelper'
@@ -108,6 +108,7 @@ const SORT_FIELD = {
   VOL_7DAYS: 3,
   FEES: 4,
   APY: 5,
+  TIME: 6,
 }
 
 const FIELD_TO_VALUE = (field, useTracked) => {
@@ -120,6 +121,8 @@ const FIELD_TO_VALUE = (field, useTracked) => {
       return useTracked ? 'oneWeekVolumeUSD' : 'oneWeekVolumeUntracked'
     case SORT_FIELD.FEES:
       return useTracked ? 'oneDayVolumeUSD' : 'oneDayVolumeUntracked'
+    case SORT_FIELD.TIME:
+      return 'createdAtTimestamp'
     default:
       return 'trackedReserveUSD'
   }
@@ -166,6 +169,7 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10, useTracked = fals
       )
 
       const weekVolume = formattedNum(useTracked ? pairData.oneWeekVolumeUSD : pairData.oneWeekVolumeUntracked, true)
+      const time = formatTime(pairData.createdAtTimestamp)
 
       const fees = formattedNum(
         useTracked ? pairData.oneDayVolumeUSD * 0.003 : pairData.oneDayVolumeUntracked * 0.003,
@@ -197,7 +201,7 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10, useTracked = fals
           <DataText area="vol">{volume}</DataText>
           {!below1080 && <DataText area="volWeek">{weekVolume}</DataText>}
           {!below1080 && <DataText area="fees">{fees}</DataText>}
-          {!below1080 && <DataText area="apy">{apy}</DataText>}
+          {!below1080 && <DataText area="time">{time}</DataText>}
         </DashGrid>
       )
     } else {
@@ -296,6 +300,19 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10, useTracked = fals
         {!below1080 && (
           <Flex alignItems="center" justifyContent="flexEnd">
             <ClickableText
+              area="fees"
+              onClick={(e) => {
+                setSortedColumn(SORT_FIELD.TIME)
+                setSortDirection(sortedColumn !== SORT_FIELD.TIME ? true : !sortDirection)
+              }}
+            >
+              Time {sortedColumn === SORT_FIELD.TIME ? (!sortDirection ? '↑' : '↓') : ''}
+            </ClickableText>
+          </Flex>
+        )}
+        {/* {!below1080 && (
+          <Flex alignItems="center" justifyContent="flexEnd">
+            <ClickableText
               area="apy"
               onClick={(e) => {
                 setSortedColumn(SORT_FIELD.APY)
@@ -306,7 +323,7 @@ function PairList({ pairs, color, disbaleLinks, maxItems = 10, useTracked = fals
             </ClickableText>
             <QuestionHelper text={'Based on 24hr volume annualized'} />
           </Flex>
-        )}
+        )} */}
       </DashGrid>
       <Divider />
       <List p={0}>{!pairList ? <LocalLoader /> : pairList}</List>

@@ -6,6 +6,7 @@ import {
   PAIR_CHART,
   FILTERED_TRANSACTIONS,
   PAIRS_CURRENT,
+  NEW_PAIRS_CURRENT,
   PAIRS_BULK,
   PAIRS_HISTORICAL_BULK,
   HOURLY_PAIR_RATES,
@@ -32,6 +33,7 @@ const UPDATE = 'UPDATE'
 const UPDATE_PAIR_TXNS = 'UPDATE_PAIR_TXNS'
 const UPDATE_CHART_DATA = 'UPDATE_CHART_DATA'
 const UPDATE_TOP_PAIRS = 'UPDATE_TOP_PAIRS'
+const UPDATE_NEW_TOP_PAIRS = 'UPDATE_NEW_TOP_PAIRS'
 const UPDATE_HOURLY_DATA = 'UPDATE_HOURLY_DATA'
 
 dayjs.extend(utc)
@@ -134,6 +136,15 @@ export default function Provider({ children }) {
   const updateTopPairs = useCallback((topPairs) => {
     dispatch({
       type: UPDATE_TOP_PAIRS,
+      payload: {
+        topPairs,
+      },
+    })
+  }, [])
+
+  const updateNewTopPairs = useCallback((topPairs) => {
+    dispatch({
+      type: UPDATE_NEW_TOP_PAIRS,
       payload: {
         topPairs,
       },
@@ -249,6 +260,7 @@ async function getBulkPairData(pairList, ethPrice) {
           return data
         })
     )
+    console.log('getBulkPairData:', pairData)
     return pairData
   } catch (e) {
     console.log(e)
@@ -472,10 +484,11 @@ export function Updater() {
       let {
         data: { pairs },
       } = await client.query({
-        query: PAIRS_CURRENT,
+        query: NEW_PAIRS_CURRENT,
         fetchPolicy: 'cache-first',
       })
 
+      console.log('Updater:', pairs)
       // format as array of addresses
       const formattedPairs = pairs.map((pair) => {
         return pair.id

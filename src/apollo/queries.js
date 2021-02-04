@@ -658,6 +658,15 @@ export const PAIRS_CURRENT = gql`
   }
 `
 
+export const NEW_PAIRS_CURRENT = gql`
+  query pairs {
+    pairs(first: 300, where: { volumeUSD_gt: 0 }, orderBy: createdAtTimestamp, orderDirection: desc) {
+      id
+      createdAtTimestamp
+    }
+  }
+`
+
 export const PAIR_DATA = (pairAddress, block) => {
   const queryString = `
     ${PairFields}
